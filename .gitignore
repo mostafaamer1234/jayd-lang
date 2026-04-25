@@ -4,8 +4,8 @@ __pycache__/
 .mypy_cache/
 .DS_Store
 build/
+dist/
 *.ll
 *.o
 *.out
 *.exe
-

@@ -23,16 +23,24 @@ escape to the heap.
 ## Quick Start
 
 ```bash
+mkdir -p build
 python3 -m jayd check examples/factorial.jayd
 python3 -m jayd emit-ir examples/factorial.jayd
-python3 -m jayd build examples/factorial.jayd -o factorial
-./factorial
+python3 -m jayd build examples/factorial.jayd -o build/factorial
+./build/factorial
 ```
 
 Run tests:
 
 ```bash
 python3 -m unittest discover -s tests
+```
+
+Or:
+
+```bash
+scripts/run_tests.sh
+scripts/build_all_examples.sh
 ```
 
 Build the C++ interop demo:
@@ -68,3 +76,19 @@ func invalid() -> int:
     let owned = move b   # compile-time ownership error
     return 0
 ```
+
+## Final Project Deliverables
+
+The final report package is organized under [docs](docs):
+
+- [Final project report index](docs/final-project-report.md)
+- [Language whitepaper](docs/whitepaper.md)
+- [Language specification](docs/language-spec.md)
+- [Tutorial](docs/tutorial.md)
+- [Reference manual](docs/reference-manual.md)
+- [Development plan](docs/development-plan.md)
+- [Translator architecture](docs/translator-architecture.md)
+- [Test plan](docs/test-plan.md)
+- [Design artifacts](docs/design-artifacts.md)
+- [Postmortem conclusions](docs/conclusions.md)
+- [Submission checklist](docs/submission-checklist.md)
