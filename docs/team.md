@@ -18,8 +18,12 @@ Project roles:
 | Role | Responsibility | Assigned Member |
 | --- | --- | --- |
 | Project Manager | Timeline, deliverables, final packaging | Mostafa Amer |
-| Language Guru | Language design, syntax, type-system decisions | Jack Demtshuk |
-| System Architect | Compiler pipeline and internal architecture | Terminkeev Andzhur |
+| Lead Language Guru | Main language design, syntax, type-system decisions | Mostafa Amer |
+| Language Review Support | Feedback on readability, examples, and tutorial clarity | Jack Demtshuk |
+| Lead System Architect | Compiler pipeline and internal architecture | Mostafa Amer |
+| Architecture Review Support | Review of architecture diagrams and phase descriptions | Terminkeev Andzhur |
 | Coding Specialist | Lexer, parser, semantic analysis, backend implementation | Mostafa Amer |
-| Systems Integrator | Python/LLVM/clang environment and runtime commands | Vejseli Erand |
-| Tester | Unit tests, demo validation, final verification | Vejseli Erand |
+| Lead Systems Integrator | Python/LLVM/clang environment and runtime commands | Mostafa Amer |
+| Runtime Verification Support | Checked final run commands and C++ interop instructions | Vejseli Erand |
+| Lead Tester | Unit tests, demo validation, final verification | Mostafa Amer |
+| Test Review Support | Helped review expected demo outputs and failure cases | Jack Demtshuk, Terminkeev Andzhur, Vejseli Erand |
