@@ -9,16 +9,17 @@ Submitter:
 Team members:
 
 - Mostafa Amer
-- TODO: Add remaining team member names before Canvas submission.
+- Jack Demtshuk
+- Terminkeev Andzhur
+- Vejseli Erand
 
-Suggested roles:
+Project roles:
 
 | Role | Responsibility | Assigned Member |
 | --- | --- | --- |
-| Project Manager | Timeline, deliverables, final packaging | TODO |
-| Language Guru | Language design, syntax, type-system decisions | TODO |
-| System Architect | Compiler pipeline and internal architecture | TODO |
-| Coding Specialist | Lexer, parser, semantic analysis, backend implementation | TODO |
-| Systems Integrator | Python/LLVM/clang environment and runtime commands | TODO |
-| Tester | Unit tests, demo validation, final verification | TODO |
-
+| Project Manager | Timeline, deliverables, final packaging | Mostafa Amer |
+| Language Guru | Language design, syntax, type-system decisions | Jack Demtshuk |
+| System Architect | Compiler pipeline and internal architecture | Terminkeev Andzhur |
+| Coding Specialist | Lexer, parser, semantic analysis, backend implementation | Mostafa Amer |
+| Systems Integrator | Python/LLVM/clang environment and runtime commands | Vejseli Erand |
+| Tester | Unit tests, demo validation, final verification | Vejseli Erand |

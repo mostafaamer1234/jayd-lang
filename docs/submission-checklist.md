@@ -18,8 +18,7 @@ Use this checklist before uploading to Canvas.
 - [x] Postmortem/conclusions: `docs/conclusions.md`
 - [x] Code listing/source code: `docs/code-listing.md`, `jayd/`, `examples/`, `tests/`
 
-## Final Manual Step
+## Final Team Information
 
-- [ ] Replace TODO entries in `docs/team.md` and `docs/component-developers.md`
-      with the real team member names and roles.
-
+- [x] Team member names and role assignments added to `docs/team.md` and
+      `docs/component-developers.md`.
