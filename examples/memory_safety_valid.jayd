@@ -1,0 +1,9 @@
+class Buffer:
+    let size: int
+
+func main() -> int:
+    let buffer = new Buffer()
+    let view = borrow buffer
+    print(1)
+    return 0
+

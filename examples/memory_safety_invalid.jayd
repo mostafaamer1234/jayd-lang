@@ -1,0 +1,10 @@
+class Buffer:
+    let size: int
+
+func main() -> int:
+    let buffer = new Buffer()
+    let view = borrow buffer
+    let owned = move buffer
+    print(owned)
+    return 0
+

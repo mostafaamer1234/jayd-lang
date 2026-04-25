@@ -1,0 +1,7 @@
+extern func cpp_square(x: int) -> int
+
+func main() -> int:
+    let y = cpp_square(9)
+    print(y)
+    return 0
+

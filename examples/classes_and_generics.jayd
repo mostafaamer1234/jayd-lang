@@ -1,0 +1,15 @@
+class Shape:
+    let name: string
+
+class Circle(Shape):
+    let radius: float
+
+func identity<T>(value: T) -> T:
+    return value
+
+func main() -> int:
+    let number = identity(42)
+    let maybe_name: string? = null
+    print(number)
+    return 0
+

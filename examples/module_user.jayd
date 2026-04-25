@@ -1,0 +1,6 @@
+import module_math
+
+func main() -> int:
+    print(triple(7))
+    return 0
+
