@@ -18,7 +18,7 @@ Project roles:
 | Role | Responsibility | Assigned Member |
 | --- | --- | --- |
 | Project Manager | Timeline, deliverables, final packaging | Mostafa Amer |
-| Lead Language Guru | Main language design, syntax, type-system decisions | Mostafa Amer |
+| Lead Language Guru | Main language design, syntax, type-system decisions | Jack Demtshuk |
 | Language Review Support | Feedback on readability, examples, and tutorial clarity | Jack Demtshuk |
 | Lead System Architect | Compiler pipeline and internal architecture | Mostafa Amer |
 | Architecture Review Support | Review of architecture diagrams and phase descriptions | Terminkeev Andzhur |
