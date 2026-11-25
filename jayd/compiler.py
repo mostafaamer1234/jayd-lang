@@ -1472,11 +1472,11 @@ class Compiler:
         return Program(imported + local)
 
 
-def write_native(ir_path: str, out_path: str, links: Optional[List[str]] = None) -> None:
+def write_native(ir_path: str, out_path: str, links: Optional[List[str]] = None, opt_level: int = 0) -> None:
     clang = shutil.which("clang")
     if not clang:
         raise JaydError("clang not found; emitted LLVM IR but cannot build native executable")
-    subprocess.check_call([clang, ir_path, *(links or []), "-Wno-override-module", "-o", out_path])
+    subprocess.check_call([clang, f"-O{opt_level}", ir_path, *(links or []), "-Wno-override-module", "-o", out_path])
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -1489,6 +1489,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             p.add_argument("-o", "--output")
         if name in ("build", "run"):
             p.add_argument("--link", action="append", default=[], help="extra object/library to pass to clang")
+            p.add_argument("-O", dest="opt_level", type=int, choices=(0, 1, 2, 3), default=0, help="LLVM optimization level passed to clang")
     ns = ap.parse_args(argv)
     compiler = Compiler()
     try:
@@ -1511,7 +1512,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         exe_path = out if out else os.path.splitext(ns.source)[0]
         with open(ir_path, "w", encoding="utf8") as f:
             f.write(result.llvm_ir)
-        write_native(ir_path, exe_path, ns.link)
+        write_native(ir_path, exe_path, ns.link, ns.opt_level)
         if ns.cmd == "run":
             subprocess.check_call([exe_path if exe_path.startswith("/") else f"./{exe_path}"])
         else:

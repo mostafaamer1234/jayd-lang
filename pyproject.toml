@@ -1,0 +1,18 @@
+[project]
+name = "jayd-lang"
+version = "1.0.0"
+description = "Compiler for Jayd, a statically typed, Python-readable language with ownership-based memory safety, compiling to LLVM IR"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+jayd = "jayd.compiler:main"
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["jayd"]
