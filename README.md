@@ -9,6 +9,8 @@ Jayd is a statically typed language that reads like Python and compiles to **LLV
 
 The compiler is written in pure Python with no dependencies (`clang` is only needed for native builds). It was built as a 4-person team project for CMPSC 470 at Penn State; I was the project manager and lead system architect, implemented the lexer, parser, semantic analysis and LLVM backend, and led testing (see [docs/team.md](docs/team.md)).
 
+**Live playground: [jayd-lang.vercel.app](https://jayd-lang.vercel.app)**. The real compiler runs in the browser through Pyodide: edit code and see type and borrow errors, stack-or-heap decisions, and the generated LLVM IR. Run `scripts/build_site.sh` after changing the compiler to refresh `site/compiler.py`.
+
 ### Compiler pipeline
 
 ```

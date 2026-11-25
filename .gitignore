@@ -9,3 +9,4 @@ dist/
 *.o
 *.out
 *.exe
+.vercel
