@@ -9,7 +9,6 @@
   font: 14px/1.65 var(--mono); letter-spacing: 0; tab-size: 4; }
 .out-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; }
 .out-head .q-seg { background: var(--bg); }
-.out-head .q-seg button[aria-pressed="true"] { background: var(--bg-alt); }
 .status { margin: 0 0 12px; font-size: 15px; font-weight: 500; }
 .status.ok { color: var(--good); }
 .status.err { color: var(--bad); font-family: var(--mono); font-size: 13px; font-weight: 500; white-space: pre-wrap; }
