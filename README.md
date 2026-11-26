@@ -1,5 +1,7 @@
 # Jayd
 
+**Live playground: [jayd-lang.vercel.app](https://jayd-lang.vercel.app)**. The real compiler runs in the browser through Pyodide: edit code and see type and borrow errors, stack-or-heap decisions, and the generated LLVM IR.
+
 Jayd is an educational compiler project for CMPSC 470. It implements a Python-readable,
 statically typed language with a classic compiler pipeline:
 
