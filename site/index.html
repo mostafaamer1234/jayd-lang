@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jayd Playground · Write, check and run Jayd</title>
+  <meta name="description" content="Write Jayd in the browser: the real compiler checks types, ownership and borrowing, shows the LLVM IR and stack-or-heap decisions, and runs your program." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231e1b2e'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='16' font-weight='700' text-anchor='middle' fill='%23a78bfa'%3EJd%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="ide.css" />
+</head>
+<body>
+  <header class="titlebar">
+    <div class="brand"><span class="logo">Jd</span><b>Jayd</b><span class="ver">playground · compiler v0.1</span></div>
+    <div class="actions">
+      <button class="btn ghost" id="share" type="button" title="Copy a link to this program">Share</button>
+      <button class="btn run" id="run" type="button" disabled title="Run (Ctrl/⌘ + Enter)"><span class="tri"></span><span id="run-label">Loading…</span></button>
+    </div>
+    <nav><a href="/about">About Jayd</a><a href="https://github.com/mostafaamer1234/JAYD-ProgrammingLanguage-Compiler">GitHub</a></nav>
+  </header>
+
+  <div class="ide">
+    <aside class="explorer">
+      <p class="pane-title">Examples</p>
+      <ul id="files"></ul>
+      <p class="pane-title">Language</p>
+      <ul class="ref">
+        <li><code>func f(x: int) -&gt; int:</code></li>
+        <li><code>let x = 1</code> · <code>x = x + 1</code></li>
+        <li><code>if</code> / <code>else</code> / <code>while</code></li>
+        <li><code>class C:</code> · <code>new C()</code></li>
+        <li><code>borrow x</code> · <code>move x</code></li>
+        <li><code>string?</code> nullable · <code>&lt;T&gt;</code> generics</li>
+      </ul>
+    </aside>
+
+    <section class="editor">
+      <div class="tabs"><span class="tab on" id="tab-name">main.jayd</span><span class="dirty" id="dirty" hidden>●</span></div>
+      <div class="code-wrap">
+        <pre class="gutter" id="gutter" aria-hidden="true"></pre>
+        <div class="code">
+          <pre class="hl" id="hl" aria-hidden="true"></pre>
+          <textarea id="src" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Jayd source code"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="ptabs" role="tablist">
+        <button role="tab" data-p="out" aria-selected="true">Output</button>
+        <button role="tab" data-p="problems" aria-selected="false">Problems <span class="count" id="pcount">0</span></button>
+        <button role="tab" data-p="ir" aria-selected="false">LLVM IR</button>
+        <button role="tab" data-p="mem" aria-selected="false">Memory</button>
+      </div>
+      <div class="pbody">
+        <pre id="p-out" class="term">Starting the compiler in your browser…</pre>
+        <div id="p-problems" hidden></div>
+        <pre id="p-ir" class="ir" hidden></pre>
+        <div id="p-mem" hidden></div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="statusbar">
+    <span id="st-check">Loading Python…</span>
+    <span id="st-pos">Ln 1, Col 1</span>
+    <span class="grow"></span>
+    <span>Checks types, ownership and borrowing, then runs. Native builds need clang on your machine.</span>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
+  <script src="ide.js"></script>
+</body>
+</html>

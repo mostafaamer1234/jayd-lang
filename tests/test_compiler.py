@@ -160,6 +160,22 @@ class JaydCompilerTests(unittest.TestCase):
             output = subprocess.check_output([exe], text=True).strip()
         self.assertEqual(output, "81")
 
+    @unittest.skipUnless(shutil.which("clang"), "clang required")
+    def test_optimized_build_matches_unoptimized_output(self):
+        from jayd.compiler import main
+
+        source = "func sum_to(n: int) -> int:\n    let t = 0\n    let i = 0\n    while i < n:\n        t = t + i\n        i = i + 1\n    return t\n\nfunc main() -> int:\n    print(sum_to(1000))\n    return 0\n"
+        with tempfile.TemporaryDirectory() as td:
+            src = os.path.join(td, "sum.jayd")
+            with open(src, "w", encoding="utf8") as f:
+                f.write(source)
+            outputs = []
+            for level in ("0", "2"):
+                exe = os.path.join(td, f"sum_O{level}")
+                self.assertEqual(main(["build", src, "-o", exe, "-O", level]), 0)
+                outputs.append(subprocess.check_output([exe], text=True).strip())
+        self.assertEqual(outputs, ["499500", "499500"])
+
 
 if __name__ == "__main__":
     unittest.main()

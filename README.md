@@ -1,26 +1,35 @@
 # Jayd
 
-**Live playground: [jayd-lang.vercel.app](https://jayd-lang.vercel.app)**. The real compiler runs in the browser through Pyodide: edit code and see type and borrow errors, stack-or-heap decisions, and the generated LLVM IR.
+![CI](https://github.com/mostafaamer1234/jayd-lang/actions/workflows/ci.yml/badge.svg)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![LLVM](https://img.shields.io/badge/backend-LLVM%20IR-orange)
+![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
-Jayd is an educational compiler project for CMPSC 470. It implements a Python-readable,
-statically typed language with a classic compiler pipeline:
+Jayd is a statically typed language that reads like Python and compiles to **LLVM IR** and native executables. It gets **deterministic memory safety without a garbage collector** from compile-time ownership and borrow checking, plus escape analysis that decides whether each allocation can stay on the stack.
 
-- indentation-aware lexer
-- recursive descent parser
-- AST and semantic analysis
-- type inference for local bindings
-- generic function signatures
-- class declarations with single inheritance checks
-- ownership and borrow checking
-- escape analysis
-- constant-folding optimization
-- LLVM IR generation
-- optional native executable generation through `clang`
+The compiler is written in pure Python with no dependencies (`clang` is only needed for native builds). It was built as a 4-person team project for CMPSC 470 at Penn State; I was the project manager and lead system architect, implemented the lexer, parser, semantic analysis and LLVM backend, and led testing (see [docs/team.md](docs/team.md)).
 
-The standout feature is deterministic memory safety without garbage collection. Jayd
-uses a conservative ownership checker with `move`, `borrow`, and `borrow mut`
-expressions, then reports whether `new` allocations can stay on the stack or must
-escape to the heap.
+**Try it: [jayd-lang.vercel.app](https://jayd-lang.vercel.app)**. An in-browser editor: the real compiler checks types, ownership and borrowing, shows the LLVM IR and stack-or-heap decisions, and `jayd/interpreter.py` runs the program and prints its output. Share programs by link. Run `scripts/build_site.sh` after changing the compiler or interpreter.
+
+### Compiler pipeline
+
+```
+source.jayd ─▶ indentation-aware lexer ─▶ recursive-descent parser ─▶ AST
+            ─▶ semantic analysis + type inference + generics + class/inheritance checks
+            ─▶ ownership / borrow checker ─▶ escape analysis ─▶ constant folding
+            ─▶ LLVM IR ─▶ clang (-O0..-O3) ─▶ native executable
+```
+
+## Performance
+
+`bench/run_bench.py` compiles each benchmark with Jayd at `-O0` and `-O2`, runs the equivalent CPython program, and **fails if the outputs differ**:
+
+| Benchmark | CPython 3.13 | Jayd -O0 | Jayd -O2 | Speedup (-O2 vs CPython) |
+|---|---|---|---|---|
+| `fib(32)`, recursive calls | 146 ms | 12 ms | 6 ms | 24x |
+| 50M-iteration arithmetic loop | 2049 ms | 34 ms | 18 ms | 117x |
+
+*Apple Silicon (arm64), macOS, median of 3 runs. CI re-runs the benchmarks on Linux and macOS for every PR. At `-O2` LLVM simplifies the loop heavily, so that number mostly shows what a typed, compiled pipeline unlocks compared with an interpreter.*
 
 ## Quick Start
 
@@ -28,11 +37,18 @@ escape to the heap.
 mkdir -p build
 python3 -m jayd check examples/factorial.jayd
 python3 -m jayd emit-ir examples/factorial.jayd
-python3 -m jayd build examples/factorial.jayd -o build/factorial
+python3 -m jayd build examples/factorial.jayd -o build/factorial      # add -O2 for optimized output
 ./build/factorial
 ```
 
-Run tests:
+Install as a command (`jayd ...`):
+
+```bash
+pip install .
+jayd run examples/factorial.jayd -o build/factorial -O2
+```
+
+Run tests and benchmarks:
 
 ```bash
 python3 -m unittest discover -s tests
@@ -43,6 +59,7 @@ Or:
 ```bash
 scripts/run_tests.sh
 scripts/build_all_examples.sh
+python3 bench/run_bench.py
 ```
 
 Build the C++ interop demo:
