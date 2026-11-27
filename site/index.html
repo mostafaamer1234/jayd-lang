@@ -3,86 +3,73 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Jayd · A memory-safe language that compiles to LLVM</title>
-  <meta name="description" content="Write Jayd in your browser and watch the real compiler type-check it, borrow-check it, decide stack or heap for every object, and emit LLVM IR." />
-  <link rel="stylesheet" href="quiet.css" />
-  <link rel="stylesheet" href="app.css" />
+  <title>Jayd Playground · Write, check and run Jayd</title>
+  <meta name="description" content="Write Jayd in the browser: the real compiler checks types, ownership and borrowing, shows the LLVM IR and stack-or-heap decisions, and runs your program." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231e1b2e'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='16' font-weight='700' text-anchor='middle' fill='%23a78bfa'%3EJd%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="ide.css" />
 </head>
 <body>
-  <nav class="q-nav">
-    <div class="q-wrap">
-      <span class="q-brand">Jayd</span>
-      <div class="q-links">
-        <a href="#playground">Playground</a>
-        <a href="#speed">Speed</a>
-        <a href="https://github.com/mostafaamer1234/JAYD-ProgrammingLanguage-Compiler">GitHub</a>
-      </div>
+  <header class="titlebar">
+    <div class="brand"><span class="logo">Jd</span><b>Jayd</b><span class="ver">playground · compiler v0.1</span></div>
+    <div class="actions">
+      <button class="btn ghost" id="share" type="button" title="Copy a link to this program">Share</button>
+      <button class="btn run" id="run" type="button" disabled title="Run (Ctrl/⌘ + Enter)"><span class="tri"></span><span id="run-label">Loading…</span></button>
     </div>
-  </nav>
+    <nav><a href="/about">About Jayd</a><a href="https://github.com/mostafaamer1234/JAYD-ProgrammingLanguage-Compiler">GitHub</a></nav>
+  </header>
 
-  <main>
-    <header class="q-wrap q-hero">
-      <p class="q-eyebrow">Compilers · Team project, lead architect</p>
-      <h1 class="q-title">Reads like Python. <span class="q-muted">Runs like C. Safe without a garbage collector.</span></h1>
-      <p class="q-lede">Jayd checks ownership and borrowing at compile time, then lowers to LLVM IR. The compiler below is the real one, running in your browser.</p>
-    </header>
+  <div class="ide">
+    <aside class="explorer">
+      <p class="pane-title">Examples</p>
+      <ul id="files"></ul>
+      <p class="pane-title">Language</p>
+      <ul class="ref">
+        <li><code>func f(x: int) -&gt; int:</code></li>
+        <li><code>let x = 1</code> · <code>x = x + 1</code></li>
+        <li><code>if</code> / <code>else</code> / <code>while</code></li>
+        <li><code>class C:</code> · <code>new C()</code></li>
+        <li><code>borrow x</code> · <code>move x</code></li>
+        <li><code>string?</code> nullable · <code>&lt;T&gt;</code> generics</li>
+      </ul>
+    </aside>
 
-    <section class="q-wrap" id="playground">
-      <div class="bar">
-        <div class="q-seg" id="examples" role="group" aria-label="Examples"></div>
-        <button class="q-btn" id="run" disabled>Loading compiler…</button>
-      </div>
-      <div class="ide">
-        <div class="pane">
-          <p class="q-caps">source.jayd</p>
-          <textarea id="src" spellcheck="false" aria-label="Jayd source"></textarea>
-        </div>
-        <div class="pane out">
-          <div class="out-head">
-            <div class="q-seg" id="views" role="group" aria-label="Output">
-              <button aria-pressed="true" data-view="ir">LLVM IR</button>
-              <button aria-pressed="false" data-view="mem">Memory</button>
-            </div>
-            <span class="q-small" id="timing"></span>
-          </div>
-          <p class="status" id="status">Starting Python in the browser…</p>
-          <pre class="code" id="ir"></pre>
-          <div id="mem" hidden></div>
+    <section class="editor">
+      <div class="tabs"><span class="tab on" id="tab-name">main.jayd</span><span class="dirty" id="dirty" hidden>●</span></div>
+      <div class="code-wrap">
+        <pre class="gutter" id="gutter" aria-hidden="true"></pre>
+        <div class="code">
+          <pre class="hl" id="hl" aria-hidden="true"></pre>
+          <textarea id="src" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Jayd source code"></textarea>
         </div>
       </div>
-      <p class="q-note">The page runs the lexer, parser, type checker, borrow checker, escape analysis, optimizer and code generator. Turning IR into a native binary needs clang, so that step stays on your machine.</p>
     </section>
 
-    <section class="q-wrap q-section" id="speed">
-      <h2 class="q-h2">Typed and compiled. <span class="q-muted">Checked against CPython on every PR.</span></h2>
-      <div class="q-figures">
-        <div class="q-figure"><div class="q-num">24<small>×</small></div><div class="q-label">faster than CPython 3.13 on recursive fib(32), 146 ms vs 6 ms at -O2</div></div>
-        <div class="q-figure"><div class="q-num">117<small>×</small></div><div class="q-label">faster on a 50M-iteration arithmetic loop, 2049 ms vs 18 ms</div></div>
-        <div class="q-figure"><div class="q-num">0</div><div class="q-label">runtime dependencies. The compiler is pure Python</div></div>
+    <section class="panel">
+      <div class="ptabs" role="tablist">
+        <button role="tab" data-p="out" aria-selected="true">Output</button>
+        <button role="tab" data-p="problems" aria-selected="false">Problems <span class="count" id="pcount">0</span></button>
+        <button role="tab" data-p="ir" aria-selected="false">LLVM IR</button>
+        <button role="tab" data-p="mem" aria-selected="false">Memory</button>
       </div>
-      <p class="q-note speed-note">Apple Silicon, median of three runs. The benchmark script fails if Jayd's output differs from Python's. At -O2 LLVM simplifies the loop heavily, so the second number mostly shows what a typed pipeline unlocks.</p>
-    </section>
-
-    <section class="q-wrap q-section">
-      <h2 class="q-h2">The pipeline.</h2>
-      <div class="q-steps">
-        <div class="q-step"><h3 class="q-h3">Lex and parse</h3><p>An indentation-aware lexer and a recursive-descent parser build the AST, with line and column on every error.</p></div>
-        <div class="q-step"><h3 class="q-h3">Type check</h3><p>Inference, generics, nullable types, and class inheritance are checked before any code is generated.</p></div>
-        <div class="q-step"><h3 class="q-h3">Own and borrow</h3><p>Moving a value that is still borrowed is a compile error, so use-after-free cannot reach runtime.</p></div>
-        <div class="q-step"><h3 class="q-h3">Stack or heap</h3><p>Escape analysis keeps objects that never leave their function on the stack. Only escaping ones are heap allocated.</p></div>
+      <div class="pbody">
+        <pre id="p-out" class="term">Starting the compiler in your browser…</pre>
+        <div id="p-problems" hidden></div>
+        <pre id="p-ir" class="ir" hidden></pre>
+        <div id="p-mem" hidden></div>
       </div>
-      <p class="q-note team">Built by a four-person team for CMPSC 470 at Penn State. Mostafa Amer was project manager and lead system architect.</p>
     </section>
-  </main>
+  </div>
 
-  <footer class="q-foot">
-    <div class="q-wrap">
-      <span>Jayd · Mostafa Amer</span>
-      <a href="https://github.com/mostafaamer1234/JAYD-ProgrammingLanguage-Compiler">Source on GitHub</a>
-    </div>
+  <footer class="statusbar">
+    <span id="st-check">Loading Python…</span>
+    <span id="st-pos">Ln 1, Col 1</span>
+    <span class="grow"></span>
+    <span>Checks types, ownership and borrowing, then runs. Native builds need clang on your machine.</span>
   </footer>
-
   <script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
-  <script src="app.js"></script>
+  <script src="ide.js"></script>
 </body>
 </html>

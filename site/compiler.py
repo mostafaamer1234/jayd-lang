@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import math
 import os
 import shutil
 import subprocess
@@ -1144,10 +1145,16 @@ class Optimizer:
                         return Literal(expr.token, expr.left.value - expr.right.value)
                     if expr.op == "*":
                         return Literal(expr.token, expr.left.value * expr.right.value)
+                    ints = all(isinstance(v, int) and not isinstance(v, bool) for v in (expr.left.value, expr.right.value))
                     if expr.op == "/" and expr.right.value != 0:
+                        if ints:  # match LLVM sdiv: truncate toward zero, stay an int
+                            q = abs(expr.left.value) // abs(expr.right.value)
+                            return Literal(expr.token, q if (expr.left.value >= 0) == (expr.right.value >= 0) else -q)
                         return Literal(expr.token, expr.left.value / expr.right.value)
-                    if expr.op == "%":
-                        return Literal(expr.token, expr.left.value % expr.right.value)
+                    if expr.op == "%" and expr.right.value != 0:
+                        if ints:  # match LLVM srem: the result takes the sign of the dividend
+                            return Literal(expr.token, int(math.fmod(expr.left.value, expr.right.value)))
+                        return Literal(expr.token, math.fmod(expr.left.value, expr.right.value))
                     if expr.op == "==":
                         return Literal(expr.token, expr.left.value == expr.right.value)
                     if expr.op == "!=":
